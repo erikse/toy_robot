@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+if RUBY_VERSION < '2.3'
+  raise "The command #{$PROGRAM_NAME} requires ruby version 2.3 or greater"
+end
+
+['lib', 'config'].each do |name|
+  fd = File.expand_path("../../#{name}", __FILE__)
+  $LOAD_PATH.unshift(fd) unless $LOAD_PATH.include?(fd)
+end
+
+require 'commands'
+
+require 'toy/robot'
+require 'toy/table'
+require 'toy/interpreter'
+
+toy_table = Toy::Table.new(width: 5, height: 5)
+toy_robot = Toy::Robot.new(table: toy_table)
+
+interpreter = Toy::Interpreter.instance
+interpreter.run(ARGF, toy_robot)
